@@ -21,11 +21,13 @@ Returns true if program debugged or sanboxed.
 Panics if detected debugger or sandbox in --release mode.
 "]
 pub fn is_sandboxed() -> bool {
-    let sanboxed_flag: bool;
+    let mut sanboxed_flag: std::mem::MaybeUninit<bool> = std::mem::MaybeUninit::uninit();
 
-    _is_sandboxed(&mut sanboxed_flag);
+    unsafe {
+        _is_sandboxed(sanboxed_flag.as_mut_ptr());
 
-    sanboxed_flag
+        sanboxed_flag.assume_init()
+    }
 }
 
 #[cfg(test)]
