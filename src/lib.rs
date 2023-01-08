@@ -8,10 +8,10 @@ unsafe fn _is_sandboxed(flag: *mut bool) {
     *flag = false;
 
     // check if debug attached
-    *flag |= panicer( debugtest::is_debugging() );
+    *flag |= panicer(debugtest::is_debugging());
 
     // check for popular vm's
-    *flag |= panicer( vmtest::is_inside_vm() );
+    *flag |= panicer(vmtest::is_inside_vm());
 }
 
 #[cfg(windows)]

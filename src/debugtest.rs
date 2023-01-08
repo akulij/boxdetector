@@ -16,10 +16,7 @@ fn is_debugger_present() -> bool {
 
 fn check_error_debug() -> bool {
     use winapi::um::debugapi::OutputDebugStringA;
-    use winapi::um::errhandlingapi::{
-        SetLastError,
-        GetLastError,
-    };
+    use winapi::um::errhandlingapi::{GetLastError, SetLastError};
 
     unsafe {
         // random error which debugger will not throw
