@@ -1,3 +1,12 @@
+#[inline(always)]
+fn is_sandboxed() -> bool {
+    let sanboxed_flag: bool;
+
+    _is_sandboxed(&mut sanboxed_flag);
+
+    sanboxed_flag
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
