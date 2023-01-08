@@ -1,3 +1,4 @@
+#[cfg(windows)]
 #[inline(always)]
 pub fn is_sandboxed() -> bool {
     let sanboxed_flag: bool;
