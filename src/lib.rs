@@ -1,5 +1,9 @@
 #[cfg(windows)]
 #[inline(always)]
+#[doc = "
+Returns true if program debugged or sanboxed.
+Panics if detected debugger or sandbox in --release mode.
+"]
 pub fn is_sandboxed() -> bool {
     let sanboxed_flag: bool;
 
