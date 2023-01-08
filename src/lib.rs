@@ -1,5 +1,5 @@
 #[inline(always)]
-fn is_sandboxed() -> bool {
+pub fn is_sandboxed() -> bool {
     let sanboxed_flag: bool;
 
     _is_sandboxed(&mut sanboxed_flag);
