@@ -1,3 +1,19 @@
+mod debugtest;
+mod tools;
+use tools::should_panic_release as panicer;
+mod vmtest;
+
+unsafe fn _is_sandboxed(flag: *mut bool) {
+    // init value to use in |= operator
+    *flag = false;
+
+    // check if debug attached
+    *flag |= panicer( debugtest::is_debugging() );
+
+    // check for popular vm's
+    *flag |= panicer( vmtest::is_inside_vm() );
+}
+
 #[cfg(windows)]
 #[inline(always)]
 #[doc = "
