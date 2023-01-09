@@ -93,8 +93,8 @@ pub fn regkey_value_contains(
         if ret as u32 == ERROR_SUCCESS {
             use std::ptr::null;
 
-            let mut data_capacity = 1024;
-            let mut data = Vec::<u8>::with_capacity(0);
+            let mut data_capacity: u32 = 1024;
+            let mut data = Vec::<u8>::with_capacity(data_capacity as usize);
             let value =
                 std::ffi::CString::new(value).expect("error creating cstring");
             let ret = RegQueryValueExA(
