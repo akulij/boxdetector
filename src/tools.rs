@@ -105,6 +105,7 @@ pub fn regkey_value_contains(
                 data.as_mut_ptr(),
                 &mut data_capacity,
             );
+            data.set_len(data_capacity as usize);
             RegCloseKey(regkey_h);
 
             if ret as u32 == ERROR_SUCCESS {
