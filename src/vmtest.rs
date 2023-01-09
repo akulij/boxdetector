@@ -26,6 +26,15 @@ fn check_vmware() -> bool {
     let mut flag = false;
 
     flag |= check_vmwaretools_regkey();
+    flag |= check_vmware_hkeys();
+
+    flag
+}
+
+fn check_qemu() -> bool {
+    let mut flag = false;
+
+    flag |= check_qemu_hkeys();
 
     flag
 }
