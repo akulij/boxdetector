@@ -87,4 +87,14 @@ mod tests {
         assert_eq!(should_panic_release(false), false);
         assert_eq!(should_panic_release(true), true);
     }
+
+    #[test]
+    fn test_regkey_exists() {
+        use winapi::um::winreg::HKEY_LOCAL_MACHINE;
+
+        assert!(!regkey_exists(
+            HKEY_LOCAL_MACHINE,
+            "SOFTWARE\\does not exists"
+        ));
+    }
 }
