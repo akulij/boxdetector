@@ -53,7 +53,8 @@ pub fn regkey_exists(hkey: HKEY, regkey: &str) -> bool {
             access_keys |= KEY_WOW64_64KEY;
         }
 
-        let ret = RegOpenKeyExA(hkey, regkey.as_ptr() as *const i8, 0, access_keys, &mut regkey_h);
+        let regkey = std::ffi::CString::new(regkey).expect("error creating cstring");
+        let ret = RegOpenKeyExA(hkey, regkey.as_ptr(), 0, access_keys, &mut regkey_h);
         println!("Ret: {}, Error: {}", ret, GetLastError());
 
         if ret as u32 == ERROR_SUCCESS {
