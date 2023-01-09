@@ -175,4 +175,9 @@ mod tests {
     fn test_disk_size() {
         assert!(!check_disk_size());
     }
+
+    #[test]
+    fn test_qemu() {
+        assert!(!check_qemu());
+    }
 }
