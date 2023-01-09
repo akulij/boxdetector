@@ -40,10 +40,24 @@ pub fn is_wow64() -> bool {
 #[cfg(windows)]
 pub fn regkey_exists(hkey: HKEY, regkey: &str) -> bool {
     use winapi::shared::winerror::ERROR_SUCCESS;
-    use winapi::um::errhandlingapi::GetLastError;
+    use winapi::um::winreg::RegCloseKey;
+
+    unsafe {
+        let (regkey_h, ret) = open_reg(hkey, regkey);
+        if ret as u32 == ERROR_SUCCESS {
+            RegCloseKey(regkey_h);
+
+            true
+        } else {
+            false
+        }
+    }
+}
+
+#[cfg(windows)]
+fn open_reg(hkey: HKEY, regkey: &str) -> (HKEY, u32) {
     use winapi::um::winnt::KEY_READ;
     use winapi::um::winnt::KEY_WOW64_64KEY;
-    use winapi::um::winreg::RegCloseKey;
     use winapi::um::winreg::RegOpenKeyExA;
 
     unsafe {
@@ -58,13 +72,8 @@ pub fn regkey_exists(hkey: HKEY, regkey: &str) -> bool {
             std::ffi::CString::new(regkey).expect("error creating cstring");
         let ret =
             RegOpenKeyExA(hkey, regkey.as_ptr(), 0, access_keys, &mut regkey_h);
-        if ret as u32 == ERROR_SUCCESS {
-            RegCloseKey(regkey_h);
 
-            true
-        } else {
-            false
-        }
+        (regkey_h, ret as u32)
     }
 }
 
