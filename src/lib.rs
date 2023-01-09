@@ -37,6 +37,8 @@ mod tests {
 
     #[test]
     fn test_not_sandboxed() {
+        assert!(!debugtest::is_debugging());
+        assert!(!vmtest::is_inside_vm());
         assert!(!is_sandboxed());
     }
 }
