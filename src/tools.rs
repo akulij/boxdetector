@@ -85,25 +85,42 @@ pub fn regkey_value_contains(
     containable: &str,
 ) -> Option<bool> {
     use winapi::shared::winerror::ERROR_SUCCESS;
-    use winapi::um::winnt::KEY_READ;
-    use winapi::um::winnt::KEY_WOW64_64KEY;
-    use winapi::um::winreg::RegOpenKeyExA;
-    use winapi::um::winreg::RegQueryValueA;
+    use winapi::um::winreg::RegCloseKey;
+    use winapi::um::winreg::RegQueryValueExA;
 
     unsafe {
-        let mut regkey_h: HKEY = std::mem::zeroed();
-
-        let mut access_keys = KEY_READ;
-        if is_wow64() {
-            access_keys |= KEY_WOW64_64KEY;
-        }
-
-        let ret =
-            RegOpenKeyExA(hkey, regkey.as_ptr(), 0, access_keys, &mut regkey_h);
+        let (regkey_h, ret) = open_reg(hkey, regkey);
         if ret as u32 == ERROR_SUCCESS {
-            let value_container = String::with_capacity(1024);
+            use std::ptr::null;
 
-            Some(false)
+            let mut data_capacity = 1024;
+            let mut data = Vec::<u8>::with_capacity(0);
+            let value =
+                std::ffi::CString::new(value).expect("error creating cstring");
+            let ret = RegQueryValueExA(
+                regkey_h,
+                value.as_ptr(),
+                null::<u32>().cast_mut(),
+                null::<u32>().cast_mut(),
+                data.as_mut_ptr(),
+                &mut data_capacity,
+            );
+            RegCloseKey(regkey_h);
+
+            if ret as u32 == ERROR_SUCCESS {
+                let key_value = String::from(
+                    std::str::from_utf8(&data)
+                        .expect("Can't convert regkey value to string"),
+                );
+
+                if key_value.to_uppercase().contains(containable) {
+                    Some(true)
+                } else {
+                    Some(false)
+                }
+            } else {
+                None
+            }
         } else {
             None
         }
