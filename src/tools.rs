@@ -55,8 +55,6 @@ pub fn regkey_exists(hkey: HKEY, regkey: &str) -> bool {
 
         let regkey = std::ffi::CString::new(regkey).expect("error creating cstring");
         let ret = RegOpenKeyExA(hkey, regkey.as_ptr(), 0, access_keys, &mut regkey_h);
-        println!("Ret: {}, Error: {}", ret, GetLastError());
-
         if ret as u32 == ERROR_SUCCESS {
             RegCloseKey(regkey_h);
 
