@@ -20,6 +20,7 @@ unsafe fn _is_sandboxed(flag: *mut bool) {
 Returns true if program debugged or sanboxed.
 Panics if detected debugger or sandbox in --release mode.
 "]
+// this wrapper need for obfuscation
 pub fn is_sandboxed() -> bool {
     let mut sanboxed_flag: std::mem::MaybeUninit<bool> = std::mem::MaybeUninit::uninit();
 
