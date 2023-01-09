@@ -1,3 +1,5 @@
+use winapi::shared::minwindef::HKEY;
+
 pub fn should_panic_release(should_me: bool) -> bool {
     if should_me {
         #[cfg(not(debug_assertions))]
@@ -61,6 +63,24 @@ pub fn regkey_exists(hkey: HKEY, regkey: &str) -> bool {
         } else {
             false
         }
+    }
+}
+
+#[cfg(windows)]
+pub fn regkey_value_contains(
+    hkey: HKEY,
+    regkey: &str,
+    value: &str,
+    containable: &str,
+) -> Option<bool> {
+    use winapi::um::winreg::RegQueryValueA;
+
+    if regkey_exists(hkey, regkey) {
+        let value_container = String::with_capacity(1024);
+
+        Some(false)
+    } else {
+        None
     }
 }
 
