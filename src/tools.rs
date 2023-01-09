@@ -114,7 +114,7 @@ pub fn regkey_value_contains(
                         .expect("Can't convert regkey value to string"),
                 );
 
-                if key_value.to_uppercase().contains(containable) {
+                if key_value.to_uppercase().contains(containable.to_uppercase().as_str()) {
                     Some(true)
                 } else {
                     Some(false)
