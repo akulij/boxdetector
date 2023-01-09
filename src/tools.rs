@@ -34,6 +34,36 @@ pub fn is_wow64() -> bool {
     false
 }
 
+#[cfg(windows)]
+pub fn regkey_exists(hkey: HKEY, regkey: &str) -> bool {
+    use winapi::shared::winerror::ERROR_SUCCESS;
+    use winapi::um::winreg::RegCloseKey;
+    use winapi::um::winreg::RegOpenKeyExA;
+    use winapi::um::winnt::KEY_READ;
+    use winapi::um::winnt::KEY_WOW64_64KEY;
+    use winapi::um::errhandlingapi::GetLastError;
+
+    unsafe {
+        let mut regkey_h: HKEY = std::mem::zeroed();
+
+        let mut access_keys = KEY_READ;
+        if is_wow64() {
+            access_keys |= KEY_WOW64_64KEY;
+        }
+
+        let ret = RegOpenKeyExA(hkey, regkey.as_ptr() as *const i8, 0, access_keys, &mut regkey_h);
+        println!("Ret: {}, Error: {}", ret, GetLastError());
+
+        if ret as u32 == ERROR_SUCCESS {
+            RegCloseKey(regkey_h);
+
+            true
+        } else {
+            false
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
