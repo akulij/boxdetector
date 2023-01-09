@@ -3,7 +3,6 @@ pub fn is_debugging() -> bool {
     let mut debuggin_flag = false;
 
     debuggin_flag |= is_debugger_present();
-    debuggin_flag |= check_error_debug();
 
     debuggin_flag
 }
