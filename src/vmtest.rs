@@ -39,6 +39,47 @@ fn check_vmwaretools_regkey() -> bool {
     )
 }
 
+fn check_vmware_hkeys() -> bool {
+    use crate::tools::regkey_value_contains;
+    use winapi::um::winreg::HKEY_LOCAL_MACHINE;
+
+    for i in 0..=2 {
+        if regkey_value_contains(
+            HKEY_LOCAL_MACHINE,
+            (String::from("HARDWARE\\DEVICEMAP\\Scsi\\Scsi Port ")
+                + i.to_string().as_str()
+                + "\\Scsi Bus 0\\Target Id 0\\Logical Unit Id 0")
+                .as_str(),
+            "Identifier",
+            "VMWARE",
+        )
+        .unwrap_or(false)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+fn check_qemu_hkeys() -> bool {
+    use crate::tools::regkey_value_contains;
+    use winapi::um::winreg::HKEY_LOCAL_MACHINE;
+
+    let mut flag = false;
+
+    flag |= regkey_value_contains(HKEY_LOCAL_MACHINE, "HARDWARE\\DEVICEMAP\\Scsi\\Scsi Port 0\\Scsi Bus 0\\Target Id 0\\Logical Unit Id 0", "Identifier", "QEMU").unwrap_or(false);
+    flag |= regkey_value_contains(
+        HKEY_LOCAL_MACHINE,
+        "HARDWARE\\Description\\System",
+        "SystemBiosVersion",
+        "QEMU",
+    )
+    .unwrap_or(false);
+
+    flag
+}
+
 fn calc_disk_gb_size(bps: u32, spc: u32, clusters: u32) -> f32 {
     bps as f32 / 1024.0 * spc as f32 / 1024.0 * clusters as f32 / 1024.0
 }
