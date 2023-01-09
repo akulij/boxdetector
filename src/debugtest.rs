@@ -31,3 +31,19 @@ fn check_error_debug() -> bool {
         GetLastError() == 92
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_is_debugger_present() {
+        assert!(!is_debugger_present());
+    }
+
+    #[cfg(feature = "extra_additional")]
+    #[test]
+    fn test_error_debug() {
+        assert!(!check_error_debug());
+    }
+}
