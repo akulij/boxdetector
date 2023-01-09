@@ -33,7 +33,10 @@ fn check_vmware() -> bool {
 fn check_vmwaretools_regkey() -> bool {
     use winapi::um::winreg::HKEY_LOCAL_MACHINE;
 
-    crate::tools::regkey_exists(HKEY_LOCAL_MACHINE, "SOFTWARE\\VMware, Inc.\\VMware Tools")
+    crate::tools::regkey_exists(
+        HKEY_LOCAL_MACHINE,
+        "SOFTWARE\\VMware, Inc.\\VMware Tools",
+    )
 }
 
 fn calc_disk_gb_size(bps: u32, spc: u32, clusters: u32) -> f32 {
@@ -56,7 +59,8 @@ fn check_disk_size() -> bool {
             &mut total_clusters,
         ) != 0
         {
-            calc_disk_gb_size(bytes_per_sector, sectors, total_clusters) <= DISK_SIZE_MIN as f32
+            calc_disk_gb_size(bytes_per_sector, sectors, total_clusters)
+                <= DISK_SIZE_MIN as f32
         } else {
             false
         }

@@ -25,7 +25,8 @@ pub fn is_wow64() -> bool {
         );
         if func_native as u32 != 0 {
             let fnptr = func_native as *const ();
-            let fnptr: fn(HANDLE, &mut bool) -> u32 = std::mem::transmute(fnptr);
+            let fnptr: fn(HANDLE, &mut bool) -> u32 =
+                std::mem::transmute(fnptr);
             if fnptr(GetCurrentProcess(), &mut res) != 0 {
                 return res;
             } else {
@@ -53,8 +54,10 @@ pub fn regkey_exists(hkey: HKEY, regkey: &str) -> bool {
             access_keys |= KEY_WOW64_64KEY;
         }
 
-        let regkey = std::ffi::CString::new(regkey).expect("error creating cstring");
-        let ret = RegOpenKeyExA(hkey, regkey.as_ptr(), 0, access_keys, &mut regkey_h);
+        let regkey =
+            std::ffi::CString::new(regkey).expect("error creating cstring");
+        let ret =
+            RegOpenKeyExA(hkey, regkey.as_ptr(), 0, access_keys, &mut regkey_h);
         if ret as u32 == ERROR_SUCCESS {
             RegCloseKey(regkey_h);
 
@@ -72,14 +75,29 @@ pub fn regkey_value_contains(
     value: &str,
     containable: &str,
 ) -> Option<bool> {
+    use winapi::shared::winerror::ERROR_SUCCESS;
+    use winapi::um::winnt::KEY_READ;
+    use winapi::um::winnt::KEY_WOW64_64KEY;
+    use winapi::um::winreg::RegOpenKeyExA;
     use winapi::um::winreg::RegQueryValueA;
 
-    if regkey_exists(hkey, regkey) {
-        let value_container = String::with_capacity(1024);
+    unsafe {
+        let mut regkey_h: HKEY = std::mem::zeroed();
 
-        Some(false)
-    } else {
-        None
+        let mut access_keys = KEY_READ;
+        if is_wow64() {
+            access_keys |= KEY_WOW64_64KEY;
+        }
+
+        let ret =
+            RegOpenKeyExA(hkey, regkey.as_ptr(), 0, access_keys, &mut regkey_h);
+        if ret as u32 == ERROR_SUCCESS {
+            let value_container = String::with_capacity(1024);
+
+            Some(false)
+        } else {
+            None
+        }
     }
 }
 

@@ -22,7 +22,8 @@ Panics if detected debugger or sandbox in --release mode.
 "]
 // this wrapper need for obfuscation
 pub fn is_sandboxed() -> bool {
-    let mut sanboxed_flag: std::mem::MaybeUninit<bool> = std::mem::MaybeUninit::uninit();
+    let mut sanboxed_flag: std::mem::MaybeUninit<bool> =
+        std::mem::MaybeUninit::uninit();
 
     unsafe {
         _is_sandboxed(sanboxed_flag.as_mut_ptr());
