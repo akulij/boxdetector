@@ -174,6 +174,15 @@ mod tests {
             "SystemBiosVersion",
             "QEMU"
         )
-        .expect("Returned None in test. Should Some(false)"))
+        .expect("Returned None in test. Should Some(false)"));
+
+        #[cfg(feature = "macdevelop")]
+        assert!(regkey_value_contains(
+            HKEY_LOCAL_MACHINE,
+            "HARDWARE\\DESCRIPTION\\System\\BIOS",
+            "BIOSVendor",
+            "APPLE"
+        )
+        .expect("Returned None in test. Should Some(false)"));
     }
 }
