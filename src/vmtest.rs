@@ -94,3 +94,17 @@ fn check_native_vhd_boot() -> bool {
         is_native
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_vhd() {
+        assert!(!check_native_vhd_boot());
+    }
+    #[test]
+    fn test_disk_size() {
+        assert!(!check_disk_size());
+    }
+}
