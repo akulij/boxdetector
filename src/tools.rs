@@ -116,5 +116,7 @@ mod tests {
             HKEY_LOCAL_MACHINE,
             "SOFTWARE\\does not exists"
         ));
+
+        assert!(regkey_exists(HKEY_LOCAL_MACHINE, "SOFTWARE"));
     }
 }
