@@ -145,4 +145,17 @@ mod tests {
 
         assert!(regkey_exists(HKEY_LOCAL_MACHINE, "SOFTWARE"));
     }
+
+    #[test]
+    fn test_regkey_contains() {
+        use winapi::um::winreg::HKEY_LOCAL_MACHINE;
+
+        assert!(!regkey_value_contains(
+            HKEY_LOCAL_MACHINE,
+            "HARDWARE\\Description\\System",
+            "SystemBiosVersion",
+            "QEMU"
+        )
+        .expect("Returned None in test. Should Some(false)"))
+    }
 }
